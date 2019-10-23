@@ -39,5 +39,5 @@ for i in range(0,10):
     
 df_good = get_related_tweets("Joker good movie")
 print(df_good.head(5))
-for i in range(10,20):
+for i in range(0,10):
     print(df_good['tweet'].iloc[i])
