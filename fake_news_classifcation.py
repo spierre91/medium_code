@@ -21,7 +21,7 @@ train_data, test_data = imdb_dataset(train=True, test=True)
 df = pd.read_csv("fake.csv")
 df = df[['text', 'type']]
 print(len(df))
-print(df.head())
+
 
 from collections import Counter 
 
@@ -38,8 +38,8 @@ df = df.sample(frac=1, random_state = 24).reset_index(drop=True)
 
 print(Counter(df['type'].values))
 
-train_data = df.head(9)
-test_data = df.tail(9)
+train_data = df.head(19)
+test_data = df.tail(19)
 
 print(train_data)
 train_data = [{'text': text, 'type': type_data } for text in list(train_data['text']) for type_data in list(train_data['type'])]
@@ -53,12 +53,14 @@ tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=Tru
 train_tokens = list(map(lambda t: ['[CLS]'] + tokenizer.tokenize(t)[:511], train_texts))
 test_tokens = list(map(lambda t: ['[CLS]'] + tokenizer.tokenize(t)[:511], test_texts))
 
-
 train_tokens_ids = list(map(tokenizer.convert_tokens_to_ids, train_tokens))
 test_tokens_ids = list(map(tokenizer.convert_tokens_to_ids, test_tokens))
 
+
+
 train_tokens_ids = pad_sequences(train_tokens_ids, maxlen=512, truncating="post", padding="post", dtype="int")
 test_tokens_ids = pad_sequences(test_tokens_ids, maxlen=512, truncating="post", padding="post", dtype="int")
+
 
 train_y = np.array(train_labels) == 'fake'
 test_y = np.array(test_labels) == 'fake'
@@ -83,7 +85,7 @@ class BertBinaryClassifier(nn.Module):
         return proba
 
 BATCH_SIZE = 1
-EPOCHS = 10
+EPOCHS = 1
 
 
 train_masks = [[float(i > 0) for i in ii] for ii in train_tokens_ids]
@@ -101,8 +103,8 @@ train_dataloader =  torch.utils.data.DataLoader(train_dataset, sampler=train_sam
 test_dataset =  torch.utils.data.TensorDataset(test_tokens_tensor, test_masks_tensor, test_y_tensor)
 test_sampler =  torch.utils.data.SequentialSampler(test_dataset)
 test_dataloader =  torch.utils.data.DataLoader(test_dataset, sampler=test_sampler, batch_size=BATCH_SIZE)
-#
-#
+
+
 bert_clf = BertBinaryClassifier()
 optimizer = torch.optim.Adam(bert_clf.parameters(), lr=3e-6)
 
