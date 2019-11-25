@@ -28,7 +28,7 @@ df.fillna(0, inplace=True)
 print("Length After:", len(df))
 
 print("FILTERING DATA")
-df = df[df['breed'== 'Mastiff Mix']]
+df = df[df['breed']== 'Mastiff Mix']
 df = df[df['sex_upon_outcome'] == 'Spayed Female']
 print(df.head())
 
@@ -76,8 +76,8 @@ print(df.loc[3:6, 'breed'])
 print("AGGREGRATING DATA")
 
 df = pd.read_csv("aac_shelter_outcomes.csv")
-df  = df.groupby('year_of_birth')['breed'].count()
-print(df.head())
+df  = df.groupby(['year_of_birth', 'breed'])['breed'].count()
+print(df)
 
 
 df = pd.read_csv("aac_shelter_outcomes.csv")
