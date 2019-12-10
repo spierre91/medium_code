@@ -12,24 +12,6 @@ import numpy as np
 
 pd.set_option('display.max_columns', 1000000)
 
-
-df = pd.read_csv("online_retail.csv")
-
-np.random.seed(32)
-df['column_with_bad_values'] = np.random.randint(4, size = len(df))
-df['column_with_bad_values'].iloc[0] = np.nan
-df['column_with_bad_values'].iloc[2] = np.nan
-df['column_with_bad_values'].iloc[4] = np.nan
-print(df.head())
-
-
-df['column_with_bad_values'].fillna(df['column_with_bad_values'].mean(), inplace = True)
-print(df.head())
-
-
-
-import pandas as pd 
-
 #read in data 
 df = pd.read_csv("online_retail.csv")
 print(df.head())
