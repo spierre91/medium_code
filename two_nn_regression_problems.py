@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb 12 12:48:54 2020
+
+@author: sadrachpierre
+"""
+
 import pandas as pd 
 import numpy as np 
 from sklearn.model_selection import train_test_split 
@@ -19,11 +27,17 @@ y_train=np.reshape(y_train, (-1,1))
 
 X_scaled = MinMaxScaler()
 y_scaled = MinMaxScaler()
+X_test_scaled = MinMaxScaler()
+
 
 X_scaled.fit(X_train)
 X_scaled = X_scaled.transform(X_train)
 
-y_scaled.fit(X_train)
+#X_test_scaled.fit(X_test)
+#X_test_scaled = X_test_scaled.transform(X_test)
+
+
+y_scaled.fit(y_train)
 y_scaled = y_scaled.transform(y_train)
 
 
@@ -32,14 +46,21 @@ y_scaled = y_scaled.transform(y_train)
 
 #print(df.head())
 #
-#model = Sequential()
-#model.add(Dense(64, input_dim=5, kernel_initializer='normal', activation='relu'))
-#model.add(Dense(64, activation='relu'))
-#model.add(Dense(1, activation='linear'))
-#model.compile(loss='mse', optimizer='adam', metrics=['mse','mae'], validation_split = 0.2)
-#model.fit(xscale, yscale, epochs=150, batch_size=50, )
+model = Sequential()
+model.add(Dense(64, input_dim=5, kernel_initializer='normal', activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(1, activation='linear'))
+model.compile(loss='mse', optimizer='adam', metrics=['mse','mae'], validation_split = 0.2)
+model.fit(X_scaled, y_scaled, epochs=100, batch_size=10 )
 
+y_pred = model.predict(X_test)
 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+sns.set()
+plt.scatter(y_test, y_pred)
+plt.xlabel('True Values')
+plt.ylabel('Predictions')
 
 #column_names = ['MPG','Cylinders','Displacement','Horsepower','Weight',
 #                'Acceleration', 'Model Year', 'Origin']
