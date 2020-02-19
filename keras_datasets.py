@@ -9,11 +9,12 @@ from tensorflow.keras.datasets import cifar10
 
 import matplotlib.pyplot as plt 
 
-plt.imshow(X_train[0])
+plt.imshow(X_train[2], )
 
 plt.show()
 
 
+print("Label: ", y_train[2])
 
 from keras.datasets import cifar100
 
@@ -25,7 +26,7 @@ from keras.datasets import cifar100
 
 from keras.datasets import imdb
 
-(x_train, y_train), (x_test, y_test) = imdb.load_data(path="imdb.npz",
+(X_train, y_train), (X_test, y_test) = imdb.load_data(path="imdb.npz",
                                                       num_words=None,
                                                       skip_top=0,
                                                       maxlen=None,
@@ -33,3 +34,31 @@ from keras.datasets import imdb
                                                       start_char=1,
                                                       oov_char=2,
                                                       index_from=3)
+print(X_train[0])
+print("Label: ", y_train[0])
+
+
+from keras.datasets import mnist
+
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+
+print(X_train[0])
+
+print("Label: ", y_train[0])
+
+plt.imshow(X_train[2], cmap='gray')
+
+plt.show()
+
+
+from keras.datasets import fashion_mnist
+
+(X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+
+
+
+plt.imshow(X_train[2], cmap='gray')
+
+plt.show()
+
+print("Label: ", y_train[2])
