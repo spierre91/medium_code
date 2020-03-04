@@ -1,3 +1,7 @@
+'''
+Predicting burn area of wildfire 
+'''
+
 import pandas as pd
 
 df = pd.read_csv("forestfires.csv")
@@ -26,6 +30,14 @@ for i in range(0, 1000):
     result.append(mean_absolute_error(y_test, y_pred))
     
 print("Accuracy: ", np.mean(result))
+
+
+
+
+
+'''
+Image classification
+'''
 
 import os
 from sklearn.metrics import confusion_matrix
@@ -88,4 +100,53 @@ model.add(Flatten())
 model.add(Dense(128, activation = 'relu'))
 model.add(Dense(6, activation = 'softmax'))
 
-        
+
+
+
+
+'''
+Predicting medical costs
+'''
+
+
+df = pd.read_csv("insurance.csv")
+
+print(df.head())
+
+df['sex_cat'] = df['sex'].astype('category')
+df['sex_cat'] = df['sex_cat'].cat.codes
+
+
+df['smoker_cat'] = df['smoker'].astype('category')
+df['smoker_cat'] = df['smoker_cat'].cat.codes
+
+df['region_cat'] = df['region'].astype('category')
+df['region_cat'] = df['region_cat'].cat.codes
+
+import numpy as np
+
+X = np.array(df[['age', 'sex_cat', 'bmi', 'children', 'smoker_cat', 'region_cat']])
+y = np.array(df['charges'])
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
+
+from sklearn.neighbors import KNeighborsRegressor
+reg = KNeighborsRegressor(n_neighbors = 5)
+
+reg.fit(X_train, y_train)
+
+y_pred = reg.predict(X_test)
+
+from sklearn.metrics import mean_absolute_error
+accuracy = mean_absolute_error(y_test, y_pred)
+print("Mean Absolute Error: ", accuracy)
+
+
+import matplotlib.pyplot as plt 
+plt.scatter(y_test, y_pred)
+plt.xlabel('True')
+plt.ylabel('Predicted')
+plt.title('K-nearest neighbors')
+
