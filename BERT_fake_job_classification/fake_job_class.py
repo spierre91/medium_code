@@ -102,4 +102,20 @@ for epoch_num in range(EPOCHS):
         print('Epoch: ', epoch_num + 1)
         print("\r" + "{0}/{1} loss: {2} ".format(step_num, len(train_data) / BATCH_SIZE, train_loss / (step_num + 1)))
         
+bert_clf.eval()
+bert_predicted = []
+all_logits = []
+with torch.no_grad():
+    for step_num, batch_data in enumerate(test_dataloader):
+
+        token_ids, masks, labels = tuple(t for t in batch_data)
+
+        logits = bert_clf(token_ids, masks)
+        loss_func = nn.BCELoss()
+        loss = loss_func(logits, labels)
+        numpy_logits = logits.cpu().detach().numpy()
+        
+        bert_predicted += list(numpy_logits[:, 0] > 0.5)
+        all_logits += list(numpy_logits[:, 0])
+        
 print(classification_report(test_y, bert_predicted))
