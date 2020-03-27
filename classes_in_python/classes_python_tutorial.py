@@ -1,3 +1,4 @@
+#manually set attributes
 class Spotify_User:
     pass
 
