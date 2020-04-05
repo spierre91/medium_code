@@ -1,0 +1,9 @@
+{"album_title" : "Yellow Submarine",
+     "release_year" : 1966,
+     "won_grammy" : false,
+     "band" : "The Beatles",
+     "album_sale": null,
+     "musicians" : ["John Lennon", "Paul McCartney", "George   Harrison", "Ringo Starr"],
+     "studio" : {"studio_name": "Abbey Road Studios", "location": "London, England"}
+     }
+~            
