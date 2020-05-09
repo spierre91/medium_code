@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 from tensorflow.keras import layers
+from tensorflow.python.keras import backend as K
+K.clear_session()
 import tensorflow as tf
-
 
 (train_images, train_labels), (_, _) = tf.keras.datasets.mnist.load_data()
 plt.imshow(train_images[0], cmap='gray')
@@ -9,7 +10,7 @@ plt.show()
 train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
 train_images = (train_images - 127.5) / 127.5 # Normalize the images to [-1, 1]
 
-BATCH_SIZE = 6000
+
 
 
 def make_generator_model():
@@ -44,7 +45,7 @@ noise = tf.random.normal([1, 100])
 generated_image = generator(noise, training=False)
 
 
-from tensorflow.python.keras import backend as K
+
 your_session = K.get_session()
 
 array = generated_image[0, :, :, 0].eval(session=your_session)
@@ -52,6 +53,8 @@ array = generated_image[0, :, :, 0].eval(session=your_session)
 
 plt.imshow(array, cmap='gray')
 plt.show()
+
+
 
 
 def discriminator_model():
@@ -91,7 +94,7 @@ generator_optimizer = tf.keras.optimizers.Adam(1e-4)
 discriminator_optimizer = tf.keras.optimizers.Adam(1e-4)
 
 
-EPOCHS = 2
+EPOCHS = 50
 noise_dim = 100
 num_examples_to_generate = 16
 
@@ -99,7 +102,7 @@ seed = tf.random.normal([num_examples_to_generate, noise_dim])
 
 @tf.function
 def train_step(images):
-    noise = tf.random.normal([BATCH_SIZE, noise_dim])
+    noise = tf.random.normal([1, noise_dim])
 
     with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
       generated_images = generator(noise, training=True)
