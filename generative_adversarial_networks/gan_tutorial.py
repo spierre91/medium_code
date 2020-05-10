@@ -3,6 +3,9 @@ from tensorflow.keras import layers
 from tensorflow.python.keras import backend as K
 K.clear_session()
 import tensorflow as tf
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+
 
 (train_images, train_labels), (_, _) = tf.keras.datasets.mnist.load_data()
 plt.imshow(train_images[0], cmap='gray')
@@ -136,6 +139,15 @@ def generate_and_save_images(model, epoch, test_input):
   plt.savefig('image_at_epoch_{:04d}.png'.format(epoch))
   plt.show()
   
+
+import time
+import os
+checkpoint_dir = './training_checkpoints'
+checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
+checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
+                                 discriminator_optimizer=discriminator_optimizer,
+                                 generator=generator,
+                                 discriminator=discriminator)
   
 def train(dataset, epochs):
   for epoch in range(epochs):
@@ -145,8 +157,14 @@ def train(dataset, epochs):
     generate_and_save_images(generator,
                              epoch + 1,
                              seed)
-    display.clear_output(wait=True)
-    generate_and_save_images(generator,
+    if (epoch + 1) % 5 == 0:
+      checkpoint.save(file_prefix = checkpoint_prefix)
+
+    print ('Time for epoch {} is {} sec'.format(epoch + 1, time.time()-start))
+
+  # Generate after the final epoch
+  display.clear_output(wait=True)
+  generate_and_save_images(generator,
                            epochs,
                            seed)
     
