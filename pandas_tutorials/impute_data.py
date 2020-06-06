@@ -8,7 +8,7 @@ print(type(df.isnull().sum()))
 
 from collections import Counter
 print(Counter(df['country']))
-
+df['country'].fillna(df['country'].mode()[0], inplace = True)
 
 df_US = df[df['country']=='US']
 print(df_US.isnull().sum())
