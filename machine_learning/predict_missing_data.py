@@ -80,3 +80,26 @@ for train_index, test_index in kf.split(df_filter):
 
 print("Mean Square Error (Random Forest): ", mean_squared_error(y_pred_rf, y_true_rf))
 print("Mean Square Error (Linear Regression): ", mean_squared_error(y_true, y_pred))
+
+
+df_missing = df[df['price'].isnull()].copy()
+
+X_test_lr = np.array(df_missing['points']).reshape(-1, 1)
+X_test_rf = np.array(df_missing['points'])
+
+
+X_train_lr = np.array(df_filter['points']).reshape(-1, 1)    
+y_train_lr = np.array(df_filter['price']).reshape(-1, 1)    
+
+X_train_rf = np.array(df_filter[features])
+y_train_rf = np.array(df_filter['price'])
+
+
+model_lr = LinearRegression()
+model_lr.fit(X_train_lr, y_train_lr)
+print("Linear regression predictions: ", model_lr.predict(X_test_lr)[0])
+
+
+model_rf = RandomForestRegressor(n_estimators = 1000, max_depth = 1000, random_state = 42)
+model_rf.fit(X_train_rf, y_train_rf)
+print("Random forests regression predictions: ", model_rf.predict(X_test_rf)[0])
